@@ -2,17 +2,26 @@ import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
 const ThreeBackground = ({ theme = 'dark' }) => {
-    const containerRef = useRef();
+    const containerRef = useRef(null);
+    const themeRef = useRef(theme);
 
+    // Keep themeRef in sync without recreating the scene
     useEffect(() => {
+        themeRef.current = theme;
+    }, [theme]);
+
+    // Run the entire WebGL setup exactly ONCE
+    useEffect(() => {
+        if (!containerRef.current) return;
+
         let mouseX = 0;
         let mouseY = 0;
-        let windowHalfX = window.innerWidth / 2;
-        let windowHalfY = window.innerHeight / 2;
+        const windowHalfX = window.innerWidth / 2;
+        const windowHalfY = window.innerHeight / 2;
 
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = window.innerWidth < 768 ? 9 : 6;
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = window.innerWidth < 768 ? 10 : 7;
 
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
@@ -21,141 +30,133 @@ const ThreeBackground = ({ theme = 'dark' }) => {
 
         const isMobile = window.innerWidth < 768;
 
-        // --- 1. Particles ---
-        const particlesGeometry = new THREE.BufferGeometry();
-        const particlesCount = isMobile ? 1200 : 3000;
-        const posArray = new Float32Array(particlesCount * 3);
-
-        for (let i = 0; i < particlesCount * 3; i++) {
-            posArray[i] = (Math.random() - 0.5) * 15; // Spread wider
+        // ── Particles ──────────────────────────────
+        const particleCount = isMobile ? 1500 : 3500;
+        const positions = new Float32Array(particleCount * 3);
+        for (let i = 0; i < particleCount * 3; i++) {
+            positions[i] = (Math.random() - 0.5) * 20;
         }
-
-        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-
-        const particlesMaterial = new THREE.PointsMaterial({
-            size: isMobile ? 0.012 : 0.008,
-            color: new THREE.Color(theme === 'light' ? '#8b5cf6' : '#00f3ff'),
+        const pGeo = new THREE.BufferGeometry();
+        pGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const pMat = new THREE.PointsMaterial({
+            size: isMobile ? 0.015 : 0.01,
+            color: new THREE.Color('#00f3ff'),
             transparent: true,
-            opacity: theme === 'light' ? 0.6 : 0.9,
-            blending: THREE.AdditiveBlending
+            opacity: 0.85,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false,
         });
+        const particles = new THREE.Points(pGeo, pMat);
+        scene.add(particles);
 
-        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-        scene.add(particlesMesh);
+        // ── Glowing Orbs ───────────────────────────
+        const makeOrb = (color, opacity) => {
+            const geo = new THREE.SphereGeometry(isMobile ? 1.8 : 2.8, 32, 32);
+            const mat = new THREE.MeshBasicMaterial({
+                color: new THREE.Color(color),
+                transparent: true,
+                opacity,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false,
+            });
+            return new THREE.Mesh(geo, mat);
+        };
 
-        // --- 2. Fluid Glowing Orbs ---
-        const orbGeometry = new THREE.SphereGeometry(isMobile ? 1.5 : 2.5, 32, 32);
-        
-        const orb1Mat = new THREE.MeshBasicMaterial({ 
-            color: new THREE.Color(0x00f3ff), transparent: true, opacity: 0.15, blending: THREE.AdditiveBlending 
-        });
-        const orb1 = new THREE.Mesh(orbGeometry, orb1Mat);
-        scene.add(orb1);
+        const orb1 = makeOrb(0x00f3ff, 0.18); // cyan
+        const orb2 = makeOrb(0x9d00ff, 0.18); // purple
+        const orb3 = makeOrb(0xff0080, 0.14); // pink
+        scene.add(orb1, orb2, orb3);
 
-        const orb2Mat = new THREE.MeshBasicMaterial({ 
-            color: new THREE.Color(0x9d00ff), transparent: true, opacity: 0.15, blending: THREE.AdditiveBlending 
-        });
-        const orb2 = new THREE.Mesh(orbGeometry, orb2Mat);
-        scene.add(orb2);
-
-        const orb3Mat = new THREE.MeshBasicMaterial({ 
-            color: new THREE.Color(0xff0080), transparent: true, opacity: 0.12, blending: THREE.AdditiveBlending 
-        });
-        const orb3 = new THREE.Mesh(orbGeometry, orb3Mat);
-        scene.add(orb3);
-
-        // --- 3. Floor Plane ---
-        const planeGeometry = new THREE.PlaneGeometry(30, 30, 32, 32);
-        const planeMaterial = new THREE.MeshBasicMaterial({
-            color: new THREE.Color(theme === 'light' ? '#ffffff' : '#0a0a0a'),
-            side: THREE.DoubleSide,
+        // ── Wireframe Floor ────────────────────────
+        const floorGeo = new THREE.PlaneGeometry(40, 40, 20, 20);
+        const floorMat = new THREE.MeshBasicMaterial({
+            color: new THREE.Color(0xffffff),
             wireframe: true,
             transparent: true,
-            opacity: theme === 'light' ? 0.05 : 0.1,
-            blending: THREE.AdditiveBlending
+            opacity: 0.06,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false,
         });
+        const floor = new THREE.Mesh(floorGeo, floorMat);
+        floor.rotation.x = -Math.PI / 2.5;
+        floor.position.y = -4;
+        scene.add(floor);
 
-        const planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
-        planeMesh.rotation.x = -Math.PI / 2;
-        planeMesh.position.y = -3;
-        scene.add(planeMesh);
-
-        // Resize Hook
-        const onWindowResize = () => {
-            windowHalfX = window.innerWidth / 2;
-            windowHalfY = window.innerHeight / 2;
+        // ── Events ─────────────────────────────────
+        const onResize = () => {
             camera.aspect = window.innerWidth / window.innerHeight;
-            camera.position.z = window.innerWidth < 768 ? 9 : 6;
+            camera.position.z = window.innerWidth < 768 ? 10 : 7;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         };
-        
-        window.addEventListener('resize', onWindowResize);
-
-        const onDocumentMouseMove = (event) => {
-            if (window.innerWidth >= 768) {
-              mouseX = event.clientX - windowHalfX;
-              mouseY = event.clientY - windowHalfY;
-            }
+        const onMouse = (e) => {
+            if (window.innerWidth < 768) return;
+            mouseX = (e.clientX - window.innerWidth / 2) / window.innerWidth;
+            mouseY = (e.clientY - window.innerHeight / 2) / window.innerHeight;
         };
-        document.addEventListener('mousemove', onDocumentMouseMove);
+        window.addEventListener('resize', onResize);
+        window.addEventListener('mousemove', onMouse);
 
-        // Animation Loop
-        let animationFrameId;
+        // ── Animation Loop ──────────────────────────
+        let rafId;
         const animate = () => {
-            animationFrameId = requestAnimationFrame(animate);
+            rafId = requestAnimationFrame(animate);
+            const t = Date.now() * 0.0003;
 
-            const time = Date.now() * 0.0005;
+            // Rotate particles slowly
+            particles.rotation.y += 0.0004;
+            particles.rotation.x += 0.00015;
 
-            if (particlesMesh) {
-              particlesMesh.rotation.y += 0.0005;
-              particlesMesh.rotation.x += 0.0002;
+            // Orbs float in a 3-D figure-8 pattern
+            orb1.position.set(
+                Math.sin(t * 0.8) * 5,
+                Math.cos(t * 0.6) * 3.5,
+                Math.sin(t * 0.4) * 2.5
+            );
+            orb2.position.set(
+                Math.cos(t * 0.5) * 6,
+                Math.sin(t * 0.7) * 4,
+                Math.cos(t * 0.3) * 3
+            );
+            orb3.position.set(
+                Math.sin(t * 0.6 + 1) * 4.5,
+                Math.cos(t * 0.4 + 2) * 3,
+                Math.sin(t * 0.5 + 0.5) * 2
+            );
 
-              particlesMesh.position.x += (mouseX * 0.0005 - particlesMesh.position.x) * 0.05;
-              particlesMesh.position.y += (-mouseY * 0.0005 - particlesMesh.position.y) * 0.05;
-            }
+            // Slowly rotate the wireframe
+            floor.rotation.z = t * 0.05;
 
-            // Animate Orbs inside a fluid 3D pattern
-            orb1.position.x = Math.sin(time * 0.7) * 4;
-            orb1.position.y = Math.cos(time * 0.5) * 3;
-            orb1.position.z = Math.sin(time * 0.3) * 2;
-
-            orb2.position.x = Math.cos(time * 0.3) * 5;
-            orb2.position.y = Math.sin(time * 0.5) * 4;
-            orb2.position.z = Math.cos(time * 0.4) * 2;
-
-            orb3.position.x = Math.sin(time * 0.5) * 4;
-            orb3.position.y = Math.sin(time * 0.7) * 4;
-            orb3.position.z = Math.sin(time * 0.6) * 3;
-            
-            // Slow Plane rotation
-            planeMesh.rotation.z = time * 0.1;
-
-            camera.position.x += (mouseX * 0.0002 - camera.position.x) * 0.05;
-            camera.position.y += (-mouseY * 0.0002 - camera.position.y) * 0.05;
+            // Mouse parallax on camera
+            camera.position.x += (mouseX * 1.5 - camera.position.x) * 0.03;
+            camera.position.y += (-mouseY * 1.5 - camera.position.y) * 0.03;
             camera.lookAt(scene.position);
 
             renderer.render(scene, camera);
         };
-
         animate();
 
         return () => {
-            cancelAnimationFrame(animationFrameId);
-            window.removeEventListener('resize', onWindowResize);
-            document.removeEventListener('mousemove', onDocumentMouseMove);
-            if (containerRef.current && renderer.domElement) {
+            cancelAnimationFrame(rafId);
+            window.removeEventListener('resize', onResize);
+            window.removeEventListener('mousemove', onMouse);
+            if (containerRef.current && renderer.domElement.parentNode === containerRef.current) {
                 containerRef.current.removeChild(renderer.domElement);
             }
-            scene.clear();
+            pGeo.dispose();
+            pMat.dispose();
+            floorGeo.dispose();
+            floorMat.dispose();
             renderer.dispose();
         };
-    }, [theme]); 
+    }, []); // ← runs only ONCE, never re-creates on theme toggle
 
     return (
-        <div 
-            ref={containerRef} 
-            className={`fixed inset-0 pointer-events-none -z-20 ${theme === 'light' ? 'opacity-40' : 'mix-blend-screen opacity-100'}`}
+        <div
+            ref={containerRef}
+            className={`fixed inset-0 pointer-events-none -z-20 transition-opacity duration-700 ${
+                theme === 'light' ? 'opacity-0' : 'mix-blend-screen opacity-100'
+            }`}
             style={{ width: '100vw', height: '100vh', top: 0, left: 0 }}
         />
     );
