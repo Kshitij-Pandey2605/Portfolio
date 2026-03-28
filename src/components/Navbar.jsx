@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Moon, Sun } from 'lucide-react';
+import { Menu, X, Moon, Sun, FileText } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const navLinks = [
   { name: 'Home', href: '#home' },
@@ -71,6 +72,15 @@ const Navbar = ({ theme, toggleTheme }) => {
         </div>
 
         <div className="flex items-center gap-4">
+          {/* Resume Button */}
+          <Link
+            to="/resume"
+            className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl text-white text-xs font-black uppercase tracking-widest interactive transition-all duration-300 hover:scale-105"
+            style={{ background: 'linear-gradient(135deg, #0ea5e9, #7e22ce)', boxShadow: '0 0 15px rgba(126,34,206,0.3)' }}
+          >
+            <FileText size={14} /> Resume
+          </Link>
+
           <button 
             onClick={toggleTheme} 
             className="p-2 glass rounded-xl text-gray-400 hover:text-white transition-colors interactive"

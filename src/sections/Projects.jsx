@@ -78,12 +78,12 @@ const Projects = () => {
             </div>
 
             {/* Content Area */}
-            <div className="p-6 md:p-10 relative bg-[#0a0a0a]/80 backdrop-blur-3xl -mt-12 rounded-t-[3rem] border-t border-white/10 flex flex-col flex-1">
-              <h3 className="text-2xl md:text-3xl font-black mb-4 text-white group-hover:text-accent-cyan transition-colors tracking-tight">
+            <div className="p-6 md:p-10 relative bg-[#0d0d1a]/90 backdrop-blur-3xl -mt-12 rounded-t-[3rem] border-t border-white/10 flex flex-col flex-1">
+              <h3 className="text-2xl md:text-3xl font-black mb-4 text-white group-hover:text-accent-cyan transition-colors tracking-tight" style={{textShadow:'0 1px 4px rgba(0,0,0,0.8)'}}>
                 {project.title}
               </h3>
               <div className="mb-6">
-                <p className="text-gray-400 leading-relaxed text-lg font-medium opacity-80 group-hover:opacity-100 transition-opacity">
+                <p className="text-gray-300 leading-relaxed text-base font-medium opacity-90 group-hover:opacity-100 transition-opacity">
                   {project.description}
                 </p>
               </div>

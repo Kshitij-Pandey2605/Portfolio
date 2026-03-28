@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { ChevronDown, ArrowRight } from 'lucide-react';
+import { ChevronDown, ArrowRight, FileText, Download } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 import profileImg from '../assets/profile.jpg';
 
@@ -100,6 +101,15 @@ const Hero = () => {
               </span>
               <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity" />
             </a>
+            <Link
+              to="/resume"
+              className="btn-premium group relative px-8 py-4 rounded-xl text-white font-bold text-lg overflow-hidden inline-flex items-center gap-2 interactive"
+              style={{ background: 'linear-gradient(135deg, #0ea5e9, #7e22ce)', boxShadow: '0 0 20px rgba(14,165,233,0.3)' }}
+            >
+              <FileText size={18} />
+              <span>View Resume</span>
+              <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-15 transition-opacity" />
+            </Link>
             <a
               href="#contact"
               className="btn-premium px-8 py-4 rounded-xl border border-white/10 glass text-white font-bold text-lg hover:bg-white/10 hover:border-accent-cyan inline-block interactive"

@@ -1,165 +1,151 @@
 import React, { useEffect, useRef } from 'react';
-import * as THREE from 'three';
 
+/**
+ * Animated background:
+ *  - CSS radial-gradient glowing blobs (guaranteed visible, GPU keyframes)
+ *  - Three.js star-particle field on top
+ */
 const ThreeBackground = ({ theme = 'dark' }) => {
-    const containerRef = useRef(null);
-    const themeRef = useRef(theme);
+  const canvasRef = useRef(null);
 
-    // Keep themeRef in sync without recreating the scene
-    useEffect(() => {
-        themeRef.current = theme;
-    }, [theme]);
+  /* ── Three.js particles only ─────────────────────────── */
+  useEffect(() => {
+    if (theme === 'light') return;
+    let THREE, renderer, rafId;
 
-    // Run the entire WebGL setup exactly ONCE
-    useEffect(() => {
-        if (!containerRef.current) return;
+    const run = async () => {
+      THREE = await import('three');
+      if (!canvasRef.current) return;
 
-        let mouseX = 0;
-        let mouseY = 0;
-        const windowHalfX = window.innerWidth / 2;
-        const windowHalfY = window.innerHeight / 2;
+      const W = window.innerWidth, H = window.innerHeight;
+      const scene  = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(60, W / H, 0.1, 1000);
+      camera.position.z = W < 768 ? 14 : 10;
 
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = window.innerWidth < 768 ? 10 : 7;
+      renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
+      renderer.setSize(W, H);
+      renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+      renderer.setClearColor(0x000000, 0);
+      canvasRef.current.appendChild(renderer.domElement);
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        containerRef.current.appendChild(renderer.domElement);
+      // particles
+      const pCount = W < 768 ? 1200 : 3500;
+      const pos = new Float32Array(pCount * 3);
+      for (let i = 0; i < pCount * 3; i++) pos[i] = (Math.random() - 0.5) * 30;
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+      const pts = new THREE.Points(geo, new THREE.PointsMaterial({
+        size: W < 768 ? 0.07 : 0.05, color: 0x00d4ff,
+        transparent: true, opacity: 0.75,
+      }));
+      scene.add(pts);
 
-        const isMobile = window.innerWidth < 768;
+      // grid
+      const grid = new THREE.Mesh(
+        new THREE.PlaneGeometry(60, 60, 28, 28),
+        new THREE.MeshBasicMaterial({ color: 0x00d4ff, wireframe: true, transparent: true, opacity: 0.05 })
+      );
+      grid.rotation.x = -Math.PI / 2.5;
+      grid.position.y = -5;
+      scene.add(grid);
 
-        // ── Particles ──────────────────────────────
-        const particleCount = isMobile ? 1500 : 3500;
-        const positions = new Float32Array(particleCount * 3);
-        for (let i = 0; i < particleCount * 3; i++) {
-            positions[i] = (Math.random() - 0.5) * 20;
+      let mx = 0, my = 0;
+      const onMouse = e => { mx = (e.clientX / innerWidth - 0.5) * 2; my = (e.clientY / innerHeight - 0.5) * 2; };
+      const onResize = () => {
+        camera.aspect = innerWidth / innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(innerWidth, innerHeight);
+      };
+      window.addEventListener('mousemove', onMouse);
+      window.addEventListener('resize',    onResize);
+
+      let last = performance.now();
+      const tick = now => {
+        rafId = requestAnimationFrame(tick);
+        const dt = Math.min((now - last) / 1000, 0.05);
+        last = now;
+        pts.rotation.y += 0.003 * dt * 60;
+        pts.rotation.x += 0.001 * dt * 60;
+        pts.position.x += (mx * 0.5 - pts.position.x) * 0.05;
+        pts.position.y += (-my * 0.5 - pts.position.y) * 0.05;
+        grid.rotation.z += 0.0005 * dt * 60;
+        camera.position.x += (mx * 1.5 - camera.position.x) * 0.04;
+        camera.position.y += (-my * 1.5 - camera.position.y) * 0.04;
+        camera.lookAt(scene.position);
+        renderer.render(scene, camera);
+      };
+      rafId = requestAnimationFrame(tick);
+
+      return () => {
+        cancelAnimationFrame(rafId);
+        window.removeEventListener('mousemove', onMouse);
+        window.removeEventListener('resize',    onResize);
+        try { if (canvasRef.current?.contains(renderer.domElement)) canvasRef.current.removeChild(renderer.domElement); } catch (_) {}
+        renderer.dispose();
+      };
+    };
+
+    let cleanup;
+    run().then(fn => { cleanup = fn; });
+    return () => { cleanup?.(); if (rafId) cancelAnimationFrame(rafId); };
+  }, [theme]);
+
+  if (theme === 'light') return null;
+
+  return (
+    <>
+      {/* ── CSS glowing blobs – always visible ─ */}
+      <style>{`
+        @keyframes orbFloat1 {
+          0%   { transform: translate(0,    0)    scale(1);   }
+          33%  { transform: translate(120px,-80px) scale(1.1); }
+          66%  { transform: translate(-60px, 100px) scale(0.9); }
+          100% { transform: translate(0,    0)    scale(1);   }
         }
-        const pGeo = new THREE.BufferGeometry();
-        pGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        const pMat = new THREE.PointsMaterial({
-            size: isMobile ? 0.015 : 0.01,
-            color: new THREE.Color('#00f3ff'),
-            transparent: true,
-            opacity: 0.85,
-            blending: THREE.AdditiveBlending,
-            depthWrite: false,
-        });
-        const particles = new THREE.Points(pGeo, pMat);
-        scene.add(particles);
+        @keyframes orbFloat2 {
+          0%   { transform: translate(0,  0)     scale(1);   }
+          40%  { transform: translate(-140px, 90px) scale(1.15); }
+          75%  { transform: translate(80px, -110px) scale(0.88); }
+          100% { transform: translate(0,  0)     scale(1);   }
+        }
+        @keyframes orbFloat3 {
+          0%   { transform: translate(0, 0)       scale(1);   }
+          50%  { transform: translate(100px, 130px) scale(1.2); }
+          100% { transform: translate(0, 0)       scale(1);   }
+        }
+        .bg-orb { position:fixed; border-radius:50%; pointer-events:none; filter:blur(72px); }
+      `}</style>
 
-        // ── Glowing Orbs ───────────────────────────
-        const makeOrb = (color, opacity) => {
-            const geo = new THREE.SphereGeometry(isMobile ? 1.8 : 2.8, 32, 32);
-            const mat = new THREE.MeshBasicMaterial({
-                color: new THREE.Color(color),
-                transparent: true,
-                opacity,
-                blending: THREE.AdditiveBlending,
-                depthWrite: false,
-            });
-            return new THREE.Mesh(geo, mat);
-        };
+      {/* Cyan top-right */}
+      <div className="bg-orb" style={{
+        width: 380, height: 380, top: '-60px', right: '5%',
+        background: 'radial-gradient(circle, rgba(0,212,255,0.55) 0%, transparent 70%)',
+        animation: 'orbFloat1 18s ease-in-out infinite', zIndex: 0,
+      }} />
+      {/* Purple bottom-left */}
+      <div className="bg-orb" style={{
+        width: 420, height: 420, bottom: '0', left: '-5%',
+        background: 'radial-gradient(circle, rgba(139,0,255,0.50) 0%, transparent 70%)',
+        animation: 'orbFloat2 22s ease-in-out infinite', zIndex: 0,
+      }} />
+      {/* Pink center-right */}
+      <div className="bg-orb" style={{
+        width: 300, height: 300, top: '40%', right: '20%',
+        background: 'radial-gradient(circle, rgba(255,0,122,0.42) 0%, transparent 70%)',
+        animation: 'orbFloat3 16s ease-in-out infinite', zIndex: 0,
+      }} />
 
-        const orb1 = makeOrb(0x00f3ff, 0.18); // cyan
-        const orb2 = makeOrb(0x9d00ff, 0.18); // purple
-        const orb3 = makeOrb(0xff0080, 0.14); // pink
-        scene.add(orb1, orb2, orb3);
-
-        // ── Wireframe Floor ────────────────────────
-        const floorGeo = new THREE.PlaneGeometry(40, 40, 20, 20);
-        const floorMat = new THREE.MeshBasicMaterial({
-            color: new THREE.Color(0xffffff),
-            wireframe: true,
-            transparent: true,
-            opacity: 0.06,
-            blending: THREE.AdditiveBlending,
-            depthWrite: false,
-        });
-        const floor = new THREE.Mesh(floorGeo, floorMat);
-        floor.rotation.x = -Math.PI / 2.5;
-        floor.position.y = -4;
-        scene.add(floor);
-
-        // ── Events ─────────────────────────────────
-        const onResize = () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.position.z = window.innerWidth < 768 ? 10 : 7;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        };
-        const onMouse = (e) => {
-            if (window.innerWidth < 768) return;
-            mouseX = (e.clientX - window.innerWidth / 2) / window.innerWidth;
-            mouseY = (e.clientY - window.innerHeight / 2) / window.innerHeight;
-        };
-        window.addEventListener('resize', onResize);
-        window.addEventListener('mousemove', onMouse);
-
-        // ── Animation Loop ──────────────────────────
-        let rafId;
-        const animate = () => {
-            rafId = requestAnimationFrame(animate);
-            const t = Date.now() * 0.0003;
-
-            // Rotate particles slowly
-            particles.rotation.y += 0.0004;
-            particles.rotation.x += 0.00015;
-
-            // Orbs float in a 3-D figure-8 pattern
-            orb1.position.set(
-                Math.sin(t * 0.8) * 5,
-                Math.cos(t * 0.6) * 3.5,
-                Math.sin(t * 0.4) * 2.5
-            );
-            orb2.position.set(
-                Math.cos(t * 0.5) * 6,
-                Math.sin(t * 0.7) * 4,
-                Math.cos(t * 0.3) * 3
-            );
-            orb3.position.set(
-                Math.sin(t * 0.6 + 1) * 4.5,
-                Math.cos(t * 0.4 + 2) * 3,
-                Math.sin(t * 0.5 + 0.5) * 2
-            );
-
-            // Slowly rotate the wireframe
-            floor.rotation.z = t * 0.05;
-
-            // Mouse parallax on camera
-            camera.position.x += (mouseX * 1.5 - camera.position.x) * 0.03;
-            camera.position.y += (-mouseY * 1.5 - camera.position.y) * 0.03;
-            camera.lookAt(scene.position);
-
-            renderer.render(scene, camera);
-        };
-        animate();
-
-        return () => {
-            cancelAnimationFrame(rafId);
-            window.removeEventListener('resize', onResize);
-            window.removeEventListener('mousemove', onMouse);
-            if (containerRef.current && renderer.domElement.parentNode === containerRef.current) {
-                containerRef.current.removeChild(renderer.domElement);
-            }
-            pGeo.dispose();
-            pMat.dispose();
-            floorGeo.dispose();
-            floorMat.dispose();
-            renderer.dispose();
-        };
-    }, []); // ← runs only ONCE, never re-creates on theme toggle
-
-    return (
-        <div
-            ref={containerRef}
-            className={`fixed inset-0 pointer-events-none -z-20 transition-opacity duration-700 ${
-                theme === 'light' ? 'opacity-0' : 'mix-blend-screen opacity-100'
-            }`}
-            style={{ width: '100vw', height: '100vh', top: 0, left: 0 }}
-        />
-    );
+      {/* Three.js canvas for particles + grid */}
+      <div
+        ref={canvasRef}
+        style={{
+          position: 'fixed', inset: 0,
+          width: '100vw', height: '100vh',
+          zIndex: 0, pointerEvents: 'none',
+        }}
+      />
+    </>
+  );
 };
 
 export default ThreeBackground;

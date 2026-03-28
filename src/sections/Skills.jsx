@@ -7,7 +7,7 @@ const skillsData = [
   {
     category: "Languages",
     icon: <Terminal className="text-accent-cyan" />,
-    skills: ["C", "JavaScript", "Python"],
+    skills: ["C", "C++", "JavaScript", "Python"],
     color: "cyan"
   },
   {

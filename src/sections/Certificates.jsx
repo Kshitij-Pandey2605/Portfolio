@@ -8,7 +8,7 @@ const certificates = [
     title: "Codefest – Nationwide Hackathon",
     issuer: "NIT Durgapur",
     image: "/certificates/codefest.png",
-    link: "#",
+    link: "https://unstop.com/certificate-preview/3ca79ca3-e3be-49d3-8366-261ce8da4fde",
     color: "cyan"
   },
   {
@@ -22,14 +22,14 @@ const certificates = [
     title: "Software Development Job Simulation",
     issuer: "Forage - DATACOM",
     image: "/certificates/datacom.png",
-    link: "#",
+    link: "https://www.theforage.com/completion-certificates/gCW7Xki5Y3vNpBmnn/L3NcyCoAjLno9d3T9_gCW7Xki5Y3vNpBmnn_6976031c38ec8aba41dea7b0_1773328146160_completion_certificate.pdf",
     color: "pink"
   },
   {
     title: "Introduction to Generative AI Studio",
     issuer: "Simplilearn",
     image: "/certificates/genai.png",
-    link: "#",
+    link: "https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIzODE0IiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvOTczMzgwOF85OTgwNzM4XzE3Njg4MjE5NzM5MDAucG5nIiwidXNlcm5hbWUiOiJLc2hpdGlqIFBhbmRleSJ9&utm_source=shared-certificate&utm_medium=lms&utm_campaign=shared-certificate-promotion&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F6757%2FIntroduction%2520to%2520Generative%2520AI%2520Studio%2Fcertificate%2Fdownload-skillup&%24web_only=true&_branch_match_id=1492037546462544702&_branch_referrer=H4sIAAAAAAAAA8soKSkottLXL87MLcjJ1EssKNDLyczL1k%2FVT7YICQzNM021iEqyrytKTUstKsrMS49PKsovL04tsvUBqkpN8cwDAOu7A%2BZBAAAA",
     color: "cyan"
   },
   {
