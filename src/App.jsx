@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { AnimatePresence } from 'framer-motion';
+import Preloader from './components/Preloader';
+import ThreeBackground from './components/ThreeBackground';
+import CustomCursor from './components/CustomCursor';
 import Navbar from './components/Navbar';
-import ParallaxBackground from './components/ParallaxBackground';
 import Hero from './sections/Hero';
 import About from './sections/About';
 import Skills from './sections/Skills';
@@ -11,11 +14,50 @@ import Contact from './sections/Contact';
 import Footer from './components/Footer';
 
 function App() {
+  const [theme, setTheme] = useState('dark');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('portfolio-theme') || 'dark';
+    setTheme(savedTheme);
+    document.documentElement.classList.toggle('light-theme', savedTheme === 'light');
+    
+    // Safety fallback for preloader
+    window.scrollTo(0, 0);
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    localStorage.setItem('portfolio-theme', newTheme);
+    document.documentElement.classList.toggle('light-theme', newTheme === 'light');
+  };
+
   return (
-    <main className="relative min-h-screen">
-      <ParallaxBackground />
-      <Navbar />
-      <div>
+    <>
+      <AnimatePresence>
+        {loading && <Preloader onComplete={() => setLoading(false)} />}
+      </AnimatePresence>
+
+      <main className="relative min-h-screen">
+        <CustomCursor />
+        <ThreeBackground theme={theme} />
+        
+        {/* Premium Visual Overlays for fluid gradient blob feel */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div 
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: `linear-gradient(#ffffff 1px, transparent 1px), linear-gradient(90deg, #ffffff 1px, transparent 1px)`,
+            backgroundSize: '80px 80px'
+          }}
+        />
+        <div className="absolute inset-0 opacity-[0.02]" 
+             style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }} />
+      </div>
+
+      <Navbar theme={theme} toggleTheme={toggleTheme} />
+      <div className="relative z-10">
         <Hero />
         <div className="space-y-24 pb-24">
           <About />
@@ -26,8 +68,9 @@ function App() {
           <Contact />
         </div>
       </div>
-      <Footer />
-    </main>
+        <Footer />
+      </main>
+    </>
   );
 }
 

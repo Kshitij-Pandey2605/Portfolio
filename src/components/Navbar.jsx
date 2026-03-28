@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Moon, Sun } from 'lucide-react';
 
 const navLinks = [
   { name: 'Home', href: '#home' },
@@ -12,7 +12,7 @@ const navLinks = [
   { name: 'Contact', href: '#contact' },
 ];
 
-const Navbar = () => {
+const Navbar = ({ theme, toggleTheme }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -56,35 +56,38 @@ const Navbar = () => {
         </motion.a>
 
         {/* Desktop Menu */}
-        <div className="hidden lg:flex items-center space-x-1">
+        <div className="hidden lg:flex items-center space-x-4">
           {navLinks.map((link) => (
             <a
               key={link.name}
               href={link.href}
-              className={`relative px-4 py-2 text-xs font-bold uppercase tracking-widest transition-all duration-300 hover:text-white ${
-                activeSection === link.name.toLowerCase() ? 'text-white' : 'text-gray-500'
+              className={`nav-link px-2 py-2 text-xs font-bold uppercase tracking-widest ${
+                activeSection === link.name.toLowerCase() ? 'active text-accent-cyan' : 'text-gray-400'
               }`}
             >
               <span className="relative z-10">{link.name}</span>
-              {activeSection === link.name.toLowerCase() && (
-                <motion.div
-                  layoutId="activeGlow"
-                  className="absolute inset-0 bg-white/5 rounded-lg border border-white/10"
-                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                />
-              )}
             </a>
           ))}
         </div>
 
-        {/* Mobile menu toggle */}
-        <div className="lg:hidden">
+        <div className="flex items-center gap-4">
           <button 
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="p-2 glass rounded-xl text-gray-400 hover:text-white transition-colors"
+            onClick={toggleTheme} 
+            className="p-2 glass rounded-xl text-gray-400 hover:text-white transition-colors interactive"
+            aria-label="Toggle Theme"
           >
-            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
           </button>
+          
+          {/* Mobile menu toggle */}
+          <div className="lg:hidden">
+            <button 
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-2 glass rounded-xl text-gray-400 hover:text-white transition-colors interactive"
+            >
+              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
       </div>
 

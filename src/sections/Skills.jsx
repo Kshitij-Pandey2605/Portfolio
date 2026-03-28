@@ -66,8 +66,7 @@ const Skills = () => {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1, duration: 0.5 }}
-            whileHover={{ scale: 1.02, translateY: -10 }}
-            className="group relative glass p-10 rounded-[2rem] border border-white/5 overflow-hidden transition-all duration-500 shadow-premium active:scale-95"
+            className="group relative glass p-6 md:p-10 rounded-[2rem] border border-white/5 overflow-hidden card-hover interactive"
           >
             {/* Hover Background Glow */}
             <div className={`absolute -top-24 -right-24 w-48 h-48 rounded-full blur-[80px] opacity-0 group-hover:opacity-40 transition-opacity duration-500 bg-accent-${item.color}`} />

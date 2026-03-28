@@ -5,22 +5,39 @@ import { Award, ExternalLink, ShieldCheck } from 'lucide-react';
 
 const certificates = [
   {
-    title: "Introduction to C",
-    issuer: "SoloLearn",
-    link: "https://www.sololearn.com/certificates/CC-LFBXK1HC",
+    title: "Codefest – Nationwide Hackathon",
+    issuer: "NIT Durgapur",
+    image: "/certificates/codefest.png",
+    link: "#",
     color: "cyan"
   },
   {
     title: "Introduction to JavaScript",
     issuer: "SoloLearn",
+    image: "/certificates/javascript.png",
     link: "https://www.sololearn.com/certificates/CC-ZEZH6AMT",
     color: "purple"
   },
   {
-    title: "DATACOM Software Development Simulation",
-    issuer: "Forage",
+    title: "Software Development Job Simulation",
+    issuer: "Forage - DATACOM",
+    image: "/certificates/datacom.png",
     link: "#",
     color: "pink"
+  },
+  {
+    title: "Introduction to Generative AI Studio",
+    issuer: "Simplilearn",
+    image: "/certificates/genai.png",
+    link: "#",
+    color: "cyan"
+  },
+  {
+    title: "Introduction to C",
+    issuer: "SoloLearn",
+    image: "/certificates/c-course.png",
+    link: "https://www.sololearn.com/certificates/CC-LFBXK1HC",
+    color: "purple"
   }
 ];
 const Certificates = () => {
@@ -52,39 +69,48 @@ const Certificates = () => {
         <div className="w-24 h-1 bg-neon-gradient mx-auto rounded-full" />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
         {certificates.map((cert, index) => (
           <motion.div
             key={cert.title}
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            initial={{ opacity: 0, scale: 0.9, y: 30 }}
             whileInView={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ delay: index * 0.1, duration: 0.6 }}
-            whileHover={{ translateY: -10 }}
-            className="group relative glass p-10 rounded-[2.5rem] border border-white/5 flex flex-col items-center text-center shadow-premium transition-all duration-500 overflow-hidden active:scale-95 h-full"
+            className={`group relative glass rounded-[2.5rem] border border-${cert.color === 'cyan' ? 'accent-cyan' : cert.color === 'purple' ? 'accent-purple' : 'accent-pink'}/20 flex flex-col shadow-premium overflow-hidden card-hover interactive`}
           >
-            {/* Visual Icon */}
-            <div className={`w-20 h-20 rounded-3xl flex items-center justify-center mb-8 border group-hover:rotate-[10deg] transition-transform duration-500 ${colorMap[cert.color].split(' hover:')[0]}`}>
-              <Award className={`${colorMap[cert.color].split(' ')[2]}`} size={40} />
+            {/* Half Visible Certificate Image Container */}
+            <div className="relative h-48 overflow-hidden bg-primary w-full border-b border-white/10">
+              <img 
+                src={cert.image} 
+                alt={cert.title}
+                className="w-full h-[150%] object-cover object-top group-hover:scale-110 transition-transform duration-700" 
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-primary/90 to-transparent flex items-end justify-center pb-4">
+                <Award className={`text-accent-${cert.color} z-10 group-hover:-translate-y-2 transition-transform duration-500 rounded-full bg-primary/50 p-2 glass`} size={48} />
+              </div>
             </div>
-            
-            <h3 className="text-2xl font-black mb-3 text-white tracking-tight group-hover:text-accent-cyan transition-colors line-clamp-2">
-              {cert.title}
-            </h3>
-            <p className="text-gray-500 font-bold uppercase tracking-[0.3em] text-[10px] mb-8">
-              {cert.issuer}
-            </p>
 
-            <a
-              href={cert.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`mt-auto w-full py-4 border text-white font-black text-xs uppercase tracking-widest rounded-2xl hover:text-primary transition-all duration-500 flex items-center justify-center gap-2 ${buttonMap[cert.color]}`}
-            >
-              <ExternalLink size={16} /> View Credentials
-            </a>
+            {/* Content Area */}
+            <div className="p-6 md:p-8 flex flex-col flex-1 relative z-10 text-center items-center w-full">
+              <h3 className="text-xl md:text-2xl font-black mb-2 text-white tracking-tight group-hover:text-accent-cyan transition-colors line-clamp-2 leading-snug">
+                {cert.title}
+              </h3>
+              <p className="text-gray-400 font-bold uppercase tracking-[0.2em] text-[10px] mb-8">
+                {cert.issuer}
+              </p>
 
-            {/* Background Accent */}
-            <div className={`absolute -bottom-10 -left-10 w-24 h-24 bg-accent-${cert.color} opacity-5 blur-3xl rounded-full`} />
+              <a
+                href={cert.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`mt-auto w-full py-4 border text-white font-black text-xs uppercase tracking-widest rounded-2xl flex items-center justify-center gap-2 btn-premium interactive ${buttonMap[cert.color]}`}
+              >
+                <ExternalLink size={16} /> View Certificate
+              </a>
+            </div>
+
+            {/* Bottom Accent Line */}
+            <div className={`absolute bottom-0 left-0 w-0 h-1 bg-accent-${cert.color} group-hover:w-full transition-all duration-700`} />
           </motion.div>
         ))}
       </div>

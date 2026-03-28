@@ -1,18 +1,39 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 const SectionWrapper = ({ children, id, className = "" }) => {
+  const ref = useRef(null);
+  
+  // Advanced Parallax Effect
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"]
+  });
+  
+  const yBg = useTransform(scrollYProgress, [0, 1], ["-20%", "20%"]);
+  const opacityBg = useTransform(scrollYProgress, [0, 0.5, 1], [0, 0.05, 0]);
+
   return (
     <section 
+      ref={ref}
       id={id} 
-      className={`min-h-screen py-24 px-6 md:px-12 lg:px-24 flex items-center justify-center ${className}`}
+      className={`relative min-h-screen py-24 px-6 md:px-12 lg:px-24 flex items-center justify-center overflow-hidden ${className}`}
     >
+      {/* Background Parallax Layer */}
+      <motion.div 
+        style={{ y: yBg, opacity: opacityBg }}
+        className="absolute inset-0 pointer-events-none flex items-center justify-center z-0"
+      >
+        <div className="w-[1000px] h-[1000px] border-[1px] border-white rounded-full opacity-[0.03]" />
+        <div className="absolute w-[600px] h-[600px] border-[1px] border-white rounded-full opacity-[0.03]" />
+      </motion.div>
+
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.1 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="w-full max-w-7xl"
+        className="w-full max-w-7xl relative z-10"
       >
         {children}
       </motion.div>

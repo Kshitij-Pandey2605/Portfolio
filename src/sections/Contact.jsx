@@ -38,7 +38,7 @@ const Contact = () => {
           <div className="space-y-6">
             <a 
               href="mailto:kshitij.pandey.cg@gmail.com"
-              className="group flex items-center gap-8 p-6 glass rounded-3xl border border-white/5 hover:border-accent-cyan/30 transition-all duration-300 shadow-premium"
+              className="group flex items-center gap-8 p-6 glass rounded-3xl border border-white/5 hover:border-accent-cyan/30 transition-all duration-300 shadow-premium interactive"
             >
               <div className="w-16 h-16 glass rounded-[1.25rem] flex items-center justify-center text-accent-cyan group-hover:scale-110 group-hover:bg-accent-cyan/10 transition-all duration-500 shadow-lg">
                 <Mail size={28} />
@@ -54,7 +54,7 @@ const Contact = () => {
                 href="https://www.linkedin.com/in/kshitij-pandey-b79617398/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex-1 min-w-[180px] p-6 glass rounded-3xl border border-white/5 hover:border-accent-purple/30 transition-all duration-300 flex flex-col items-center text-center shadow-lg hover:translate-y-[-5px]"
+                className="group flex-1 min-w-[180px] p-6 glass rounded-3xl border border-white/5 hover:border-accent-purple/30 transition-all duration-300 flex flex-col items-center text-center shadow-lg hover:translate-y-[-5px] interactive"
               >
                 <div className="w-12 h-12 glass rounded-2xl flex items-center justify-center text-accent-purple mb-4 group-hover:scale-110 transition-transform shadow-lg">
                   <Linkedin size={24} />
@@ -66,7 +66,7 @@ const Contact = () => {
                 href="https://github.com/Kshitij-Pandey2605"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex-1 min-w-[180px] p-6 glass rounded-3xl border border-white/5 hover:border-accent-pink/30 transition-all duration-300 flex flex-col items-center text-center shadow-lg hover:translate-y-[-5px]"
+                className="group flex-1 min-w-[180px] p-6 glass rounded-3xl border border-white/5 hover:border-accent-pink/30 transition-all duration-300 flex flex-col items-center text-center shadow-lg hover:translate-y-[-5px] interactive"
               >
                 <div className="w-12 h-12 glass rounded-2xl flex items-center justify-center text-accent-pink mb-4 group-hover:scale-110 transition-transform shadow-lg">
                   <Github size={24} />
@@ -96,43 +96,55 @@ const Contact = () => {
           <div className="absolute -inset-4 bg-neon-gradient/10 blur-[60px] rounded-[3rem] opacity-30 pointer-events-none" />
           
           <form className="relative glass p-10 md:p-12 rounded-[3rem] border border-white/10 space-y-8 shadow-premium" onSubmit={(e) => e.preventDefault()}>
-            <div className="space-y-4">
-              <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 flex items-center gap-2 px-1">
-                <User size={12} className="text-accent-cyan" /> Identity / Full Name
-              </label>
+            <div className="relative group/input">
               <input 
                 type="text" 
-                placeholder="What is your name?"
-                className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 focus:outline-none focus:border-accent-cyan focus:bg-white/10 transition-all text-white placeholder-gray-600 font-medium shadow-inner"
+                id="name"
+                placeholder=" "
+                className="input-premium peer w-full bg-white/5 border border-white/5 hover:border-white/10 rounded-2xl px-6 pt-8 pb-3 focus:outline-none focus:border-accent-cyan focus:bg-white/10 focus:shadow-[0_0_20px_rgba(14,165,233,0.15)] text-white font-medium interactive transition-all duration-300"
               />
+              <label 
+                htmlFor="name"
+                className="absolute left-6 top-6 text-gray-500 text-xs font-black uppercase tracking-widest flex items-center gap-2 transform -translate-y-3.5 scale-75 origin-[0] transition-all duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-placeholder-shown:text-gray-400 peer-focus:-translate-y-3.5 peer-focus:scale-75 peer-focus:text-accent-cyan pointer-events-none"
+              >
+                <User size={14} className="transition-colors duration-300 peer-focus:text-accent-cyan" /> Identity / Full Name
+              </label>
             </div>
 
-            <div className="space-y-4">
-              <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 flex items-center gap-2 px-1">
-                <AtSign size={12} className="text-accent-purple" /> Contact / Email Address
-              </label>
+            <div className="relative group/input">
               <input 
                 type="email" 
-                placeholder="Where can I reach you?"
-                className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 focus:outline-none focus:border-accent-purple focus:bg-white/10 transition-all text-white placeholder-gray-600 font-medium shadow-inner"
+                id="email"
+                placeholder=" "
+                className="input-premium peer w-full bg-white/5 border border-white/5 hover:border-white/10 rounded-2xl px-6 pt-8 pb-3 focus:outline-none focus:border-accent-purple focus:bg-white/10 focus:shadow-[0_0_20px_rgba(126,34,206,0.15)] text-white font-medium interactive transition-all duration-300"
               />
+              <label 
+                htmlFor="email"
+                className="absolute left-6 top-6 text-gray-500 text-xs font-black uppercase tracking-widest flex items-center gap-2 transform -translate-y-3.5 scale-75 origin-[0] transition-all duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-placeholder-shown:text-gray-400 peer-focus:-translate-y-3.5 peer-focus:scale-75 peer-focus:text-accent-purple pointer-events-none"
+              >
+                <AtSign size={14} className="transition-colors duration-300 peer-focus:text-accent-purple" /> Contact / Email Address
+              </label>
             </div>
 
-            <div className="space-y-4">
-              <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 flex items-center gap-2 px-1">
-                <MessageSquare size={12} className="text-accent-pink" /> Objective / Your Message
-              </label>
+            <div className="relative group/input">
               <textarea 
+                id="message"
                 rows="5" 
-                placeholder="Tell me about your project or inquiry..."
-                className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-5 focus:outline-none focus:border-accent-pink focus:bg-white/10 transition-all text-white placeholder-gray-600 font-medium shadow-inner resize-none"
+                placeholder=" "
+                className="input-premium peer w-full bg-white/5 border border-white/5 hover:border-white/10 rounded-2xl px-6 pt-10 pb-4 focus:outline-none focus:border-accent-pink focus:bg-white/10 focus:shadow-[0_0_20px_rgba(190,24,93,0.15)] text-white font-medium resize-none interactive transition-all duration-300"
               ></textarea>
+              <label 
+                htmlFor="message"
+                className="absolute left-6 top-6 text-gray-500 text-xs font-black uppercase tracking-widest flex items-center gap-2 transform -translate-y-3.5 scale-75 origin-[0] transition-all duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-placeholder-shown:text-gray-400 peer-focus:-translate-y-3.5 peer-focus:scale-75 peer-focus:text-accent-pink pointer-events-none"
+              >
+                <MessageSquare size={14} className="transition-colors duration-300 peer-focus:text-accent-pink" /> Objective / Your Message
+              </label>
             </div>
 
             <motion.button 
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="w-full py-5 bg-neon-gradient text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl shadow-neon-purple flex items-center justify-center gap-3 transition-shadow hover:shadow-[0_20px_40px_rgba(157,0,255,0.4)]"
+              className="btn-premium w-full py-5 bg-neon-gradient text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl shadow-neon-purple flex items-center justify-center gap-3 hover:shadow-[0_20px_40px_rgba(157,0,255,0.4)] interactive"
             >
               <Send size={18} /> Teleport Message
             </motion.button>

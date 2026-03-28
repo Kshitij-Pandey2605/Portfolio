@@ -63,7 +63,7 @@ const Hero = () => {
           </motion.div>
           
           <motion.h1 
-            className="text-6xl md:text-8xl font-black mb-6 tracking-tight leading-none"
+            className="text-5xl sm:text-6xl md:text-8xl font-black mb-6 tracking-tight leading-none"
           >
             I'm <br />
             <span className="text-transparent bg-clip-text bg-neon-gradient">KSHITIJ PANDEY</span>
@@ -93,7 +93,7 @@ const Hero = () => {
           >
             <a
               href="#projects"
-              className="group relative px-8 py-4 rounded-xl bg-neon-gradient text-white font-bold text-lg overflow-hidden transition-all shadow-neon-purple hover:scale-105 active:scale-95"
+              className="btn-premium group relative px-8 py-4 rounded-xl bg-neon-gradient text-white font-bold text-lg overflow-hidden shadow-neon-purple inline-block interactive"
             >
               <span className="relative z-10 flex items-center gap-2">
                 View My Work <ArrowRight className="group-hover:translate-x-1 transition-transform" />
@@ -102,7 +102,7 @@ const Hero = () => {
             </a>
             <a
               href="#contact"
-              className="px-8 py-4 rounded-xl border border-white/10 glass text-white font-bold text-lg transition-all hover:bg-white/10 hover:border-accent-cyan"
+              className="btn-premium px-8 py-4 rounded-xl border border-white/10 glass text-white font-bold text-lg hover:bg-white/10 hover:border-accent-cyan inline-block interactive"
             >
               Contact Me
             </a>
@@ -120,7 +120,7 @@ const Hero = () => {
         >
           <motion.div 
             style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-            className="relative w-72 h-72 md:w-96 md:h-96"
+            className="relative w-64 h-64 sm:w-72 sm:h-72 md:w-96 md:h-96"
           >
             {/* Glow Background */}
             <div className="absolute inset-0 bg-accent-purple/20 blur-[100px] rounded-full animate-pulse-slow" />

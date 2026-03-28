@@ -1,20 +1,16 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #050505;
-  --color-secondary: #0a0a0a;
-  --color-accent-cyan: #00f3ff;
-  --color-accent-purple: #9d00ff;
-  --color-accent-pink: #ff0080;
+  --color-primary: var(--color-bg);
+  --color-secondary: var(--color-card-bg);
+  --color-accent-cyan: var(--color-accent-cyan);
+  --color-accent-purple: var(--color-accent-purple);
+  --color-accent-pink: var(--color-accent-pink);
   
-  --color-dark-100: #111111;
-  --color-dark-200: #0a0a0a;
-  --color-dark-300: #050505;
-
-  --shadow-neon-cyan: 0 0 10px #00f3ff, 0 0 40px rgba(0, 243, 255, 0.3);
-  --shadow-neon-purple: 0 0 10px #9d00ff, 0 0 40px rgba(157, 0, 255, 0.3);
-  --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
-  --shadow-premium: 0 20px 50px rgba(0, 0, 0, 0.5);
+  --shadow-neon-cyan: 0 0 10px var(--color-accent-cyan), 0 0 40px rgba(0, 243, 255, 0.3);
+  --shadow-neon-purple: 0 0 10px var(--color-accent-purple), 0 0 40px rgba(157, 0, 255, 0.3);
+  --shadow-glass: var(--glass-shadow);
+  --shadow-premium: var(--premium-shadow);
 
   --background-image-neon-gradient: linear-gradient(to right, var(--color-accent-cyan), var(--color-accent-purple), var(--color-accent-pink));
   --background-image-glass-gradient: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
@@ -28,26 +24,71 @@
   }
 }
 
-.text-transparent.bg-clip-text {
-  background-color: var(--color-accent-cyan); /* Fallback to cyan if gradient fails */
+:root {
+  --color-bg: #050505;
+  --color-text: #f3f4f6;
+  --color-accent-cyan: #00f3ff;
+  --color-accent-purple: #9d00ff;
+  --color-accent-pink: #ff0080;
+  --color-card-bg: rgba(255, 255, 255, 0.05);
+  --color-card-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+  --premium-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  --page-bg-gradient: linear-gradient(145deg, #050505 0%, #111111 50%, #0a0a0a 100%);
 }
 
-:root {
-  color-scheme: dark;
+.light-theme {
+  --color-bg: #f8fafc;
+  --color-text: #0f172a;
+  --color-accent-cyan: #0ea5e9;
+  --color-accent-purple: #7e22ce;
+  --color-accent-pink: #be185d;
+  --color-card-bg: rgba(255, 255, 255, 0.6);
+  --color-card-border: rgba(0, 0, 0, 0.08);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.08);
+  --premium-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+  --page-bg-gradient: linear-gradient(145deg, #f0f4f8 0%, #e2e8f0 50%, #cbd5e1 100%);
+}
+
+.text-transparent.bg-clip-text {
+  background-color: var(--color-accent-cyan);
 }
 
 body {
-  @apply bg-primary text-gray-100 overflow-x-hidden;
+  background: var(--page-bg-gradient);
+  color: var(--color-text);
+  overflow-x: hidden;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  cursor: none;
+  transition: background 0.8s ease, color 0.8s ease;
+}
+
+a, button, input, textarea, select, .interactive {
+  cursor: none !important;
+}
+
+/* Typography Enhancements */
+h1, h2, h3, h4, h5, h6 {
+  @apply tracking-tight font-semibold;
 }
 
 /* Glassmorphism */
 .glass {
-  @apply bg-white/10 backdrop-blur-md border border-white/20 shadow-glass;
+  background: var(--color-card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-card-border);
+  box-shadow: var(--glass-shadow);
+  transition: background 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .glass-dark {
-  @apply bg-black/20 backdrop-blur-lg border border-white/10 shadow-glass;
+  background: var(--color-card-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--color-card-border);
+  box-shadow: var(--glass-shadow);
+  transition: background 0.5s ease, border-color 0.5s ease;
 }
 
 /* Neon Text */
@@ -125,4 +166,51 @@ html {
 
 .glow-card:hover::before {
   left: 100%;
+}
+
+/* Interactive Hover Effects */
+.btn-premium {
+  @apply relative overflow-hidden transition-all duration-300 ease-out;
+}
+.btn-premium:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-neon-cyan);
+}
+
+.card-hover {
+  @apply transition-all duration-300 ease-out;
+}
+.card-hover:hover {
+  transform: translateY(-10px);
+  box-shadow: var(--shadow-premium), 0 0 20px rgba(0, 243, 255, 0.2);
+}
+
+.img-hover {
+  @apply transition-all duration-500 ease-out;
+}
+.img-hover:hover {
+  transform: scale(1.05) rotate(2deg);
+}
+
+.nav-link {
+  @apply relative transition-colors duration-300;
+}
+.nav-link::after {
+  content: '';
+  @apply absolute left-0 bottom-[-4px] w-0 h-[2px] bg-accent-cyan transition-all duration-300 ease-out;
+}
+.nav-link:hover::after, .nav-link.active::after {
+  @apply w-full;
+}
+.nav-link:hover, .nav-link.active {
+  @apply text-accent-cyan;
+  text-shadow: 0 0 8px currentColor;
+}
+
+.input-premium {
+  @apply transition-all duration-300;
+}
+.input-premium:focus {
+  @apply outline-none border-accent-cyan;
+  box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
 }

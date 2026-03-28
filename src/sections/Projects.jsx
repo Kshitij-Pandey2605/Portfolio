@@ -20,6 +20,14 @@ const projects = [
     demo: "https://youtu.be/Ol9UBQls6OE",
     type: "Frontend Simulation",
     image: havellsImg
+  },
+  {
+    title: "Dream Website Clone",
+    description: "A comprehensive clone of the Dream website built with modern HTML and CSS practices.",
+    tech: ["HTML", "CSS"],
+    demo: "https://youtu.be/Wb-3WKllPEY",
+    type: "Frontend Simulation",
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80"
   }
 ];
 
@@ -47,15 +55,14 @@ const Projects = () => {
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.2, duration: 0.8 }}
-            whileHover={{ translateY: -12 }}
-            className="group relative glass rounded-[2.5rem] overflow-hidden border border-white/10 shadow-premium active:scale-95 transition-transform duration-500"
+            className="group relative glass rounded-[2.5rem] overflow-hidden border border-white/10 card-hover interactive flex flex-col h-full"
           >
             {/* Project Image Viewport */}
-            <div className="relative h-[300px] md:h-[400px] overflow-hidden">
+            <div className="relative h-[250px] md:h-[320px] overflow-hidden">
               <img 
                 src={project.image} 
                 alt={project.title}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                className="w-full h-full object-cover img-hover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-primary/40 to-transparent" />
               
@@ -71,17 +78,17 @@ const Projects = () => {
             </div>
 
             {/* Content Area */}
-            <div className="p-10 relative bg-[#0a0a0a]/80 backdrop-blur-3xl -mt-12 rounded-t-[3rem] border-t border-white/10 flex flex-col h-full">
-              <h3 className="text-3xl font-black mb-4 text-white group-hover:text-accent-cyan transition-colors tracking-tight">
+            <div className="p-6 md:p-10 relative bg-[#0a0a0a]/80 backdrop-blur-3xl -mt-12 rounded-t-[3rem] border-t border-white/10 flex flex-col flex-1">
+              <h3 className="text-2xl md:text-3xl font-black mb-4 text-white group-hover:text-accent-cyan transition-colors tracking-tight">
                 {project.title}
               </h3>
-              <div className="min-h-[60px]">
-                <p className="text-gray-400 mb-6 leading-relaxed text-lg font-medium opacity-80 line-clamp-2 group-hover:opacity-100 transition-opacity">
+              <div className="mb-6">
+                <p className="text-gray-400 leading-relaxed text-lg font-medium opacity-80 group-hover:opacity-100 transition-opacity">
                   {project.description}
                 </p>
               </div>
               
-              <div className="flex flex-wrap gap-2 mb-10 min-h-[70px] content-start">
+              <div className="flex flex-wrap gap-2 mb-8 content-start">
                 {project.tech.map(t => (
                   <span key={t} className="text-[10px] font-black uppercase tracking-widest text-accent-cyan bg-accent-cyan/10 px-3 py-1.5 rounded-lg border border-accent-cyan/20">
                     {t}
@@ -89,15 +96,15 @@ const Projects = () => {
                 ))}
               </div>
 
-              <div className="flex flex-wrap gap-4 mt-auto">
+              <div className="flex flex-wrap gap-4 mt-auto pt-4">
                 {project.link && (
                   <a 
                     href={project.link} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="flex items-center gap-3 px-6 py-3 bg-accent-cyan text-primary rounded-xl hover:scale-105 active:scale-95 transition-all font-black text-xs uppercase tracking-widest shadow-neon-cyan"
+                    className="flex items-center gap-3 px-6 py-3 bg-accent-cyan text-primary rounded-xl btn-premium font-black text-xs uppercase tracking-widest shadow-neon-cyan interactive"
                   >
-                    <Globe size={18} /> Live Experience
+                    <Globe size={18} /> Live Demo
                   </a>
                 )}
                 {project.demo && (
@@ -105,16 +112,16 @@ const Projects = () => {
                     href={project.demo} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="flex items-center gap-3 px-6 py-3 bg-accent-pink text-white rounded-xl hover:scale-105 active:scale-95 transition-all font-black text-xs uppercase tracking-widest shadow-lg"
+                    className="flex items-center gap-3 px-6 py-3 bg-accent-pink text-white rounded-xl btn-premium font-black text-xs uppercase tracking-widest shadow-lg interactive"
                   >
-                    <Youtube size={18} /> Watch Demo
+                    <Youtube size={18} /> Watch Video
                   </a>
                 )}
                 <a 
                   href="https://github.com/Kshitij-Pandey2605" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 px-6 py-3 glass text-white rounded-xl hover:bg-white/10 hover:border-accent-cyan transition-all font-black text-xs uppercase tracking-widest"
+                  className="flex items-center gap-3 px-6 py-3 glass text-white rounded-xl btn-premium font-black text-xs uppercase tracking-widest interactive"
                 >
                   <Github size={18} /> Source Code
                 </a>
