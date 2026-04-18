@@ -22,10 +22,10 @@ const SectionWrapper = ({ children, id, className = "" }) => {
       {/* Background Parallax Layer */}
       <motion.div 
         style={{ y: yBg, opacity: opacityBg }}
-        className="absolute inset-0 pointer-events-none flex items-center justify-center z-0"
+        className="absolute inset-0 pointer-events-none flex items-center justify-center z-0 overflow-hidden"
       >
-        <div className="w-[1000px] h-[1000px] border-[1px] border-white rounded-full opacity-[0.03]" />
-        <div className="absolute w-[600px] h-[600px] border-[1px] border-white rounded-full opacity-[0.03]" />
+        <div className="w-[150vw] h-[150vw] md:w-[2500px] md:h-[2500px] border-[1px] border-white rounded-full opacity-[0.03] flex-shrink-0" />
+        <div className="absolute w-[100vw] h-[100vw] md:w-[1500px] md:h-[1500px] border-[1px] border-white rounded-full opacity-[0.03] flex-shrink-0" />
       </motion.div>
 
       <motion.div

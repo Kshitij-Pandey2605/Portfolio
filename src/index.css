@@ -84,21 +84,28 @@
 }
 
 /* Fix project/about cards hardcoded dark backgrounds in light mode */
-.light-theme [class*='bg-[#0d0d1a]'],
-.light-theme [class*='bg-[#0a0a0a]'],
-.light-theme [class*='bg-primary/95'],
-.light-theme [class*='bg-black/80'] {
-  background-color: rgba(255, 255, 255, 0.9) !important;
+.light-theme [class*='bg-[#0d0d1a]']:not([class*='/']),
+.light-theme [class*='bg-[#0a0a0a]']:not([class*='/']),
+.light-theme [class*='bg-[#050505]']:not([class*='/']),
+.light-theme [class*='bg-[#111]']:not([class*='/']),
+.light-theme [class*='bg-primary']:not([class*='/']),
+.light-theme [class*='bg-black']:not([class*='/']) {
+  background-color: rgba(255, 255, 255, 0.8) !important;
   backdrop-filter: blur(24px) !important;
   color: #1e293b !important;
 }
 
 /* Ensure text on colored backgrounds stays white across all interactive states */
-.light-theme [class*='bg-accent']:not([class*='/10']):not([class*='/20']),
-.light-theme [class*='bg-neon-gradient'],
-.light-theme [class*='hover:bg-accent']:hover,
+.light-theme [class*='bg-accent']:not([class*='/']):not(.bg-clip-text),
+.light-theme [class*='hover:bg-accent']:hover:not(.bg-clip-text),
 .light-theme .btn-premium:not(.glass):not(.border-white\/10) {
   color: #ffffff !important;
+}
+
+/* Explicitly protect text-transparent gradients */
+.light-theme .text-transparent,
+.light-theme [class*='bg-clip-text'] {
+  color: transparent !important;
 }
 
 /* Force dark text for specific common containers in light mode */
@@ -108,6 +115,11 @@
 
 .light-theme .text-white:not(.btn-premium *) {
   color: #1e293b !important;
+}
+
+/* Fix texts becoming invisible on hover in light mode */
+.light-theme .hover\:text-white:hover {
+  color: #0f172a !important;
 }
 
 .light-theme [class*='text-white'] {
@@ -178,10 +190,16 @@ html::after {
   animation: orbFloat3 18s ease-in-out infinite;
 }
 
-/* Hide orbs in light mode */
-.light-theme body::before,
-.light-theme body::after,
-.light-theme html::after { display: none; }
+/* Adapt orbs for light mode instead of hiding them */
+.light-theme body::before {
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.3) 0%, rgba(14, 165, 233, 0.05) 40%, transparent 68%);
+}
+.light-theme body::after {
+  background: radial-gradient(circle, rgba(126, 34, 206, 0.25) 0%, rgba(126, 34, 206, 0.05) 40%, transparent 68%);
+}
+.light-theme html::after {
+  background: radial-gradient(circle, rgba(190, 24, 93, 0.2) 0%, rgba(190, 24, 93, 0.05) 40%, transparent 68%);
+}
 
 body {
   background: var(--page-bg-gradient);
@@ -238,7 +256,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-primary;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {

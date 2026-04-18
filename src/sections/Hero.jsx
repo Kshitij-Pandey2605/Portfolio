@@ -132,15 +132,13 @@ const Hero = () => {
                 View My Work <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity" />
               </Link>
-              <a
-                href={profileImg ? new URL('../assets/Kshitij_Pandey_Resume.pdf', import.meta.url).href : "/Kshitij_Pandey_Resume.pdf"}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                to="/resume"
                 className="btn-premium group relative px-7 py-3.5 rounded-xl text-white font-bold overflow-hidden inline-flex items-center gap-2 interactive border border-accent-cyan/30 glass hover:border-accent-cyan"
               >
                 <FileText size={18} />
                 View Resume
-              </a>
+              </Link>
             </motion.div>
 
           </motion.div>

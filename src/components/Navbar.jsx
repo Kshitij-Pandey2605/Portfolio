@@ -6,6 +6,7 @@ import { Link, useLocation } from 'react-router-dom';
 const navLinks = [
   { name: 'Home', href: '/' },
   { name: 'Projects', href: '/projects' },
+  { name: 'Education', href: '/education' },
   { name: 'Certificates', href: '/certificates' },
   { name: 'Figma', href: '/figma' },
   { name: 'Hackathon', href: '/hackathon' },
@@ -42,11 +43,14 @@ const Navbar = ({ theme, toggleTheme }) => {
       <div className="container mx-auto px-6 md:px-12 flex justify-between items-center">
         <Link 
           to="/"
-          className="text-3xl font-black tracking-tighter group flex items-center gap-1"
+          className="group flex items-center gap-3"
         >
-          <span className="text-white group-hover:text-accent-cyan transition-colors">KP</span>
-          <span className="ml-2 px-1.5 py-0.5 rounded-md bg-white/5 border border-white/5 text-[9px] font-mono font-bold text-gray-500 uppercase tracking-widest hidden sm:block">v1.2.6</span>
-          <span className="w-2 h-2 rounded-full bg-accent-purple shadow-neon-purple animate-pulse" />
+          <div className="relative w-10 h-10 group-hover:scale-110 transition-transform duration-300">
+            <div className="absolute inset-0 bg-neon-gradient blur-md opacity-0 group-hover:opacity-40 transition-opacity rounded-xl" />
+            <img src="/logo.svg" alt="KP Logo" className="w-full h-full relative z-10 rounded-xl" />
+          </div>
+          <span className="hidden sm:inline-block px-1.5 py-0.5 rounded-md bg-white/5 border border-white/5 text-[9px] font-mono font-bold text-gray-500 uppercase tracking-widest group-hover:border-white/20 transition-colors">v1.2.6</span>
+          <span className="w-2 h-2 rounded-full bg-accent-cyan shadow-neon-cyan animate-pulse ml-1" />
         </Link>
 
         {/* Desktop Menu */}

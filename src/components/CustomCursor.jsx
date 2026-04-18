@@ -90,15 +90,15 @@ const CustomCursor = () => {
   return (
     <>
       <motion.div
-        className="fixed top-0 left-0 w-8 h-8 rounded-full border-2 pointer-events-none z-[9999]"
-        style={{ originX: 0.5, originY: 0.5 }}
+        className="fixed top-0 left-0 w-8 h-8 rounded-full border-2 pointer-events-none"
+        style={{ originX: 0.5, originY: 0.5, zIndex: 99999 }}
         variants={variantsOuter}
         animate={hoverState}
         transition={{ type: 'spring', stiffness: 100, damping: 20, mass: 0.8 }}
       />
       <motion.div
-        className="fixed top-0 left-0 w-2 h-2 rounded-full pointer-events-none z-[10000]"
-        style={{ originX: 0.5, originY: 0.5 }}
+        className="fixed top-0 left-0 w-2 h-2 rounded-full pointer-events-none"
+        style={{ originX: 0.5, originY: 0.5, zIndex: 100000 }}
         variants={variantsInner}
         animate={hoverState}
         transition={{ type: 'spring', stiffness: 400, damping: 28, mass: 0.1 }}

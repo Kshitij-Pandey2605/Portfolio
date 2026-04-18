@@ -14,6 +14,8 @@ import Resume from './sections/Resume';
 import WeatherApp from './pages/WeatherApp';
 import SmartTodo from './pages/SmartTodo';
 
+import EducationPage from './pages/EducationPage';
+
 function App() {
   const [theme, setTheme] = useState('dark');
   const [loading, setLoading] = useState(true);
@@ -41,6 +43,7 @@ function App() {
       <div className="relative min-h-screen transition-colors duration-500 selection:bg-accent-cyan/30 selection:text-white">
         <Routes>
           <Route path="/" element={<HomePage theme={theme} toggleTheme={toggleTheme} />} />
+          <Route path="/education" element={<EducationPage theme={theme} toggleTheme={toggleTheme} />} />
           <Route path="/projects" element={<ProjectsPage theme={theme} toggleTheme={toggleTheme} />} />
           <Route path="/certificates" element={<CertificatesPage theme={theme} toggleTheme={toggleTheme} />} />
           <Route path="/figma" element={<FigmaPage theme={theme} toggleTheme={toggleTheme} />} />

@@ -80,9 +80,7 @@ const FigmaPage = ({ theme, toggleTheme }) => {
                   {/* Glow */}
                   <div className={`absolute -inset-8 bg-accent-${design.color}/20 blur-[60px] rounded-full -z-10`} />
                   {/* Phone frame */}
-                  <div className="relative w-[240px] h-[490px] bg-[#111] rounded-[2.8rem] border-[6px] border-[#222] shadow-[0_30px_80px_rgba(0,0,0,0.6)] overflow-hidden">
-                    {/* Notch */}
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-5 bg-[#111] rounded-b-2xl z-20" />
+                  <div className="relative w-[260px] h-[520px] bg-black rounded-[1.5rem] border-[4px] border-[#222] shadow-[0_30px_80px_rgba(0,0,0,0.6)] overflow-hidden">
                     {/* Screen */}
                     <img
                       src={design.previewImage}
