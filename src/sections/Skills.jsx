@@ -5,40 +5,51 @@ import { Code, Layout, Database, Terminal, Settings, GitBranch, Cpu, Zap } from 
 
 const skillsData = [
   {
-    category: "Languages",
+    category: "Languages & Logic",
     icon: <Terminal className="text-accent-cyan" />,
-    skills: ["C", "C++", "JavaScript", "Python"],
+    skills: [
+      { name: "C / C++", level: 85 },
+      { name: "JavaScript (ES6+)", level: 90 },
+      { name: "Python 3.x", level: 80 }
+    ],
     color: "cyan"
   },
   {
-    category: "Frontend",
+    category: "Frontend Architecture",
     icon: <Layout className="text-accent-purple" />,
-    skills: ["HTML", "CSS", "React"],
+    skills: [
+      { name: "React Ecosystem", level: 95 },
+      { name: "Modern CSS / Tailwind", level: 95 },
+      { name: "Responsive Design", level: 90 }
+    ],
     color: "purple"
   },
   {
-    category: "Backend",
+    category: "Backend Systems",
     icon: <Code className="text-accent-pink" />,
-    skills: ["Node.js", "Express.js"],
+    skills: [
+      { name: "Node.js Runtime", level: 85 },
+      { name: "Express Framework", level: 85 }
+    ],
     color: "pink"
   },
   {
-    category: "Database",
+    category: "Data Persistence",
     icon: <Database className="text-accent-cyan" />,
-    skills: ["MongoDB"],
+    skills: [
+      { name: "MongoDB / NoSQL", level: 80 }
+    ],
     color: "cyan"
   },
   {
-    category: "Tools",
+    category: "Dev Environment",
     icon: <Settings className="text-accent-purple" />,
-    skills: ["Postman", "Figma", "Canva", "Netlify", "Vercel", "Render"],
+    skills: [
+      { name: "Git Workflow", level: 90 },
+      { name: "Figma (UI/UX)", level: 85 },
+      { name: "API Testing (Postman)", level: 80 }
+    ],
     color: "purple"
-  },
-  {
-    category: "Version Control",
-    icon: <GitBranch className="text-accent-pink" />,
-    skills: ["GitHub"],
-    color: "pink"
   }
 ];
 
@@ -47,14 +58,14 @@ const Skills = () => {
     <SectionWrapper id="skills">
       <div className="text-center mb-24">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-white/10 text-xs font-bold uppercase tracking-widest text-accent-cyan mb-6"
+           initial={{ opacity: 0, y: 20 }}
+           whileInView={{ opacity: 1, y: 0 }}
+           className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-white/10 text-[10px] font-black uppercase tracking-[0.3em] text-accent-cyan mb-6"
         >
-          <Cpu size={14} /> Technical Stack
+          <Cpu size={14} /> Technical Stack v2.0
         </motion.div>
-        <h2 className="text-5xl md:text-7xl font-black mb-6">
-          My <span className="text-transparent bg-clip-text bg-neon-gradient">Skills</span>
+        <h2 className="text-5xl md:text-7xl font-black mb-6 tracking-tighter">
+          Core <span className="text-transparent bg-clip-text bg-neon-gradient">Engine</span>
         </h2>
         <div className="w-24 h-1 bg-neon-gradient mx-auto rounded-full" />
       </div>
@@ -63,36 +74,56 @@ const Skills = () => {
         {skillsData.map((item, index) => (
           <motion.div
             key={item.category}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1, duration: 0.5 }}
-            className="group relative glass p-6 md:p-10 rounded-[2rem] border border-white/5 overflow-hidden card-hover interactive"
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ delay: index * 0.1 }}
+            className="group relative glass p-8 md:p-10 rounded-[2.5rem] border border-white/5 overflow-hidden bg-[#050505]/40 backdrop-blur-xl hover:border-white/10 transition-all duration-500"
           >
-            {/* Hover Background Glow */}
-            <div className={`absolute -top-24 -right-24 w-48 h-48 rounded-full blur-[80px] opacity-0 group-hover:opacity-40 transition-opacity duration-500 bg-accent-${item.color}`} />
+            {/* Developer Grid Pattern */}
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
             
             <div className="relative z-10">
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-14 h-14 glass rounded-2xl flex items-center justify-center border border-white/10 shadow-lg group-hover:scale-110 transition-transform duration-500">
+              <div className="flex items-center gap-4 mb-12">
+                <div className="w-12 h-12 glass rounded-2xl flex items-center justify-center border border-white/5 bg-white/5 group-hover:bg-accent-cyan/5 group-hover:border-accent-cyan/20 transition-all duration-500">
                   {item.icon}
                 </div>
-                <h3 className="text-2xl font-black text-white tracking-tight">{item.category}</h3>
+                <h3 className="text-xl font-black text-white uppercase tracking-wider">{item.category}</h3>
               </div>
               
-              <div className="flex flex-wrap gap-3">
-                {item.skills.map(skill => (
-                  <span 
-                    key={skill}
-                    className="px-4 py-2 bg-white/5 text-gray-400 text-sm font-semibold rounded-xl border border-white/5 hover:border-accent-cyan hover:bg-accent-cyan/10 hover:text-accent-cyan transition-all duration-300 flex items-center gap-2"
-                  >
-                    <Zap size={10} className="opacity-50" /> {skill}
-                  </span>
+              <div className="space-y-8">
+                {item.skills.map((skill, i) => (
+                  <div key={skill.name} className="space-y-3">
+                    <div className="flex justify-between items-center font-mono">
+                      <span className="text-[11px] font-black text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                         <div className={`w-1 h-1 rounded-full bg-accent-${item.color}`} />
+                         {skill.name}
+                      </span>
+                      <span className={`text-[10px] font-bold text-accent-${item.color} opacity-60`}>{skill.level}%</span>
+                    </div>
+                    {/* Terminal-style Progress Bar */}
+                    <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden border border-white/5">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        whileInView={{ width: `${skill.level}%` }}
+                        transition={{ duration: 1.5, delay: 0.1 + (i * 0.1) }}
+                        className={`h-full bg-accent-${item.color} relative shadow-[0_0_15px_rgba(0,0,0,0.5)]`}
+                      >
+                         <div className="absolute top-0 right-0 h-full w-4 bg-white/20 skew-x-12 animate-pulse" />
+                      </motion.div>
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
 
-            {/* Bottom Accent Line */}
-            <div className={`absolute bottom-0 left-0 w-0 h-1 bg-accent-${item.color} group-hover:w-full transition-all duration-700`} />
+            {/* Engineering Specs Accent */}
+            <div className="mt-12 pt-6 border-t border-white/5 flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+              <span className="text-[9px] font-mono text-gray-600 uppercase">Compiled_v1.0.4</span>
+              <div className="flex gap-1">
+                <div className="w-1 h-1 rounded-full bg-white/20" />
+                <div className="w-1 h-1 rounded-full bg-white/20" />
+              </div>
+            </div>
           </motion.div>
         ))}
       </div>
